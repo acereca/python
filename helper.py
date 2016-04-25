@@ -10,8 +10,6 @@
 
 # todos
 
-# TODO: def exponential_fit
-
 # imports
 import numpy as _np
 import matplotlib.pyplot as _plt
@@ -62,3 +60,8 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
     if(len(extrapolate)): x = np.array(extrapolate)
 
     return fitted_curve(x), p
+
+
+# return formatted string for presenting results
+def printResult(name,value,error):
+    print("{0}: {1} +/- {2}".format(name,value,error))
