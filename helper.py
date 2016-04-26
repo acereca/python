@@ -14,7 +14,6 @@
 import numpy as _np
 import matplotlib.pyplot as _plt
 import matplotlib.mlab as _mlab
-%matplotlib inline
 
 # definitions
 
@@ -63,5 +62,8 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 
 
 # return formatted string for presenting results
-def printResult(name,value,error):
-    print("{0}: {1} +/- {2}".format(name,value,error))
+def printResult(name,value,error,unit):
+    if unit:
+        print("{0}: ( {1} +/- {2} ) {3}".format(name,value,error,unit))
+    else:
+        print("{0}: {1} +/- {2}".format(name,value,error))
