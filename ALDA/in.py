@@ -1,7 +1,7 @@
 ###     import of tsplib file format into dictionary
 ###
 ###     Author: Patrick Nisble
-###     Python ver.: 2.7+ / 3.3+
+###     Python ver.: 3.3+
 
 import re
 
@@ -10,24 +10,17 @@ def readTspData(filename):
         content = f.read().splitlines()
         clean = [x.lstrip() for x in content if x != " "]
         tupel = []
-
-        nnum = re.compile(r'[^\d]+')
-
-        for elem in clean:
-            if elem.startswith("DIMENSION"):
-                dim = int(nnum.sub("",elem))
-            elif elem.startswith("EDGE"):
-                coord = (elem.split())[1]
-
-        tupel.append((0,coord))
+        decl = {}
 
         for item in clean:
-            for x in range(1,dim + 1):
-                if item.startswith(str(x)):
-                    c1,space,c2 = item.partition(' ')
-                    b1,space,b2 = c2.partition(' ')
-                    tupel.append((c1.strip(),(b1.strip(),b2.strip())))
-
+            if item[:1].isdigit():
+                c1,space,c2 = item.partition(' ')
+                b1,space,b2 = c2.partition(' ')
+                tupel.append((c1.strip(),(b1.strip(),b2.strip())))
+            elif len(item.split(":")) == 2:
+                decl.update({item.split((":"))[0]:item.split(":")[1][1:]})
+                
+    tupel.insert(0,(0,decl))
     return tupel
 
 def elem(elem,node):
