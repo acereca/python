@@ -46,17 +46,17 @@ def distGeo(n1,n2):
     import numpy as np
     ## node 1
     deg = int(elem("x", n1))
-    minu = elem("x", n1)
+    minu = elem("x", n1) - deg
     latitude1 = np.PI * (deg + 5.0 * min / 3.0) / 180
     deg = int(elem("y", n1))
-    minu = elem("y", n1)
+    minu = elem("y", n1) - deg
     longitude1 = np.PI * (deg + 5.0 * min / 3.0) / 180
     ## node 2
     deg = int(elem("x", n2))
-    minu = elem("x", n2)
+    minu = elem("x", n2) - deg
     latitude2 = np.PI * (deg + 5.0 * min / 3.0) / 180
     deg = int(elem("y", n2))
-    minu = elem("y", n2)
+    minu = elem("y", n2) - deg
     longitude2 = np.PI * (deg + 5.0 * min / 3.0) / 180
 
     rad = 6378.388
