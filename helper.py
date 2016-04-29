@@ -25,7 +25,7 @@ def load_data(filename,skip=0):
 
     filename = str(filename)
     # returns every items in the data array as a list of items
-    return [i for i in py.loadtxt(filename, unpack=True, skiprows=skip)]
+    return [i for i in _np.genfromtxt(filename, skip_=skip)]
 
 
 # fitting curves to a linear function
@@ -62,8 +62,13 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 
 
 # return formatted string for presenting results
-def printResult(name,value,error,unit):
+def printResult(name,value,error,unit=None):
     if unit:
         print("{0}: ( {1} +/- {2} ) {3}".format(name,value,error,unit))
     else:
         print("{0}: {1} +/- {2}".format(name,value,error))
+
+def relErr(arg):
+    args = arg.T
+    inner = _np.sum(_np.multiply(_np.divide(args[1],args[0]),_np.divide(args[1],args[0])))
+    return _np.sqrt(inner)
