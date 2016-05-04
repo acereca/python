@@ -33,7 +33,7 @@ def distEuc(n1,n2):
     import math as m
     dx = (elem("x",n1)-elem("x",n2))
     dy = (elem("y",n1)-elem("y",n2))
-    return m.sqrt(dx**2+dy**2)
+    return int(m.sqrt(dx**2+dy**2)+.5)
 
 def distGeo(n1,n2):
     import math as m
@@ -56,7 +56,7 @@ def distGeo(n1,n2):
     q1 = m.cos(longitude1 - longitude2 )
     q2 = m.cos(latitude1 - latitude2 )
     q3 = m.cos(latitude1 + latitude2 )
-    dij = int(rad * m.acos(.5*((1.0+q1)*q2 - (1.0+q1)*q3)) + 1.0)
+    dij = int(rad * m.acos(.5*((1.0+q1)*q2 - (1.0+q1)*q3)) + .5)
 
     return dij
 
@@ -67,8 +67,7 @@ import sys
 
 if (len(sys.argv) >= 2 and sys.argv[1].startswith("data")):
     tspDict = readTspData(sys.argv[1])
-    print(tspDict)
     if len(sys.argv) == 4:
-        print(distEuc(tspDict[int(sys.argv[2])],tspDict[int(sys.argv[3])]))
+        print("Distance({}<->{}): {}".format(sys.argv[2],sys.argv[3],distEuc(tspDict[int(sys.argv[2])],tspDict[int(sys.argv[3])])))
 else:
     print("you gave me something else than a tsplib formatted file, pls retry :|")
