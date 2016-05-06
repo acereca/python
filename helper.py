@@ -29,7 +29,7 @@ def load_data(filename,skip=0):
 
 
 # fitting curves to a linear function
-def fit_lin():
+def fit_lin(x,y):
      from scipy.optimize import curve_fit
      x = np.array(x)
      y = np.array(y)
@@ -43,20 +43,17 @@ def fit_lin():
 # fitting curves to polynomial functions
 def fit_poly(x, y, deg=1, extrapolate=[]):
 
-    # import numpy inside the function so it doesn't appear as a function for the module
-    import numpy as np
-
-    x = np.array(x)
-    y = np.array(y)
+    x = _np.array(x)
+    y = _np.array(y)
 
     # p is an array of the polynomial coefficients
-    p = np.polyfit(x, y, deg = deg)
+    p = _np.polyfit(x, y, deg = deg)
 
     # get the desired function
-    fitted_curve = np.poly1d(p)
+    fitted_curve = _np.poly1d(p)
 
     # use extrapolate values if given
-    if(len(extrapolate)): x = np.array(extrapolate)
+    if(len(extrapolate)): x = _np.array(extrapolate)
 
     return fitted_curve(x), p
 
