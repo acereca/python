@@ -1,9 +1,7 @@
-###     import of tsplib file format into dictionary
+###     Python implementation of TSP
 ###
 ###     Author: Patrick Nisble
 ###     Python ver.: 3.3+
-
-import re
 
 def readTspData(filename):
     with open(filename) as f:
@@ -61,7 +59,7 @@ def distGeo(n1,n2):
     return dij
 
 
-## Main Block
+## Main Block / example for distEucl
 
 import sys
 

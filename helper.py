@@ -29,10 +29,10 @@ def load_data(filename,skip=0):
 
 
 # fitting curves to a linear function
-def fit_lin(x,y):
+def fit_lin(x,y,sigma=None):
      from scipy.optimize import curve_fit
-     x = np.array(x)
-     y = np.array(y)
+     x = _np.array(x)
+     y = _np.array(y)
 
      lin_func = lambda x,k,d: k * x + d
      popt, pcov = curve_fit(lin_func, x, y, sigma=sigma)
@@ -57,13 +57,17 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 
     return fitted_curve(x), p
 
-
 # return formatted string for presenting results
 def printResult(name,value,error,unit=None):
+    from IPython.display import display, Math, Latex
     if unit:
-        print("{0}: ( {1} +/- {2} ) {3}".format(name,value,error,unit))
+        out = '%s=(%s\pm %s) %s'%(name,value,error,unit)
+        #print("{0}: ( {1} +/- {2} ) {3}".format(name,value,error,unit))
     else:
-        print("{0}: {1} +/- {2}".format(name,value,error))
+        out = '%s=%s\pm %s'%(name,value,error)
+        #print("{0}: {1} +/- {2}".format(name,value,error))
+
+    display(Math(out))
 
 def relErr(arg):
     args = arg.T
