@@ -73,7 +73,5 @@ def printResult(name,value,error,unit=None):
 
     display(Math(out))
 
-def relErr(arg):
-    args = arg.T
-    inner = _np.sum(_np.multiply(_np.divide(args[1],args[0]),_np.divide(args[1],args[0])))
-    return _np.sqrt(inner)
+def relErr(dlist,alist):
+    return np.sqrt(np.sum((np.array(dlist)/np.array(alist))**2))
