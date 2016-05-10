@@ -29,12 +29,16 @@ def load_data(filename,skip=0):
 
 
 # fitting curves to a linear function
-def fit_lin(x,y,sigma=None):
+def fit_lin(x,y,sigma=None,zero=False):
      from scipy.optimize import curve_fit
      x = _np.array(x)
      y = _np.array(y)
 
      lin_func = lambda x,k,d: k * x + d
+
+     if zero is True:
+         lin_func = lambda x,k,d: k * x
+
      popt, pcov = curve_fit(lin_func, x, y, sigma=sigma)
      fitted_y = popt[0]*x + popt[1]
 
