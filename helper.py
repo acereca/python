@@ -64,14 +64,17 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 # return formatted string for presenting results
 def printResult(name,value,error,unit=None):
     from IPython.display import display, Math, Latex
-    if unit:
-        out = '%s=(%s\pm %s) %s'%(name,value,error,unit)
-        #print("{0}: ( {1} +/- {2} ) {3}".format(name,value,error,unit))
+    
+    if error != 0:
+        out = "%s\pm %s"%(value,error)
+        if unit:
+            out = '(' + out + ')' + unit
     else:
-        out = '%s=%s\pm %s'%(name,value,error)
-        #print("{0}: {1} +/- {2}".format(name,value,error))
-
-    display(Math(out))
+        out = str(value)
+        if unit:
+            out = out + unit
+        
+    display(Math(name + "=" + out))
 
 def relErr(dlist,alist):
-    return np.sqrt(np.sum((np.array(dlist)/np.array(alist))**2))
+    return _np.sqrt(_np.sum((_np.array(dlist)/_np.array(alist))**2))
