@@ -58,14 +58,60 @@ def distGeo(n1,n2):
 
     return dij
 
+def nearestNeighborSort(tspData,startNode):
+    sx = elem("x",tspData[startNode])
+    sy = elem("y",tspData[startNode])
+
+    distances = []
+
+    #calc distances between startNode and rest
+    for i in range(len(tspData)-2):
+        if i+1 >= startNode:
+            dist = (startNode,i+2,distEuc(tspData[startNode],tspData[i+2]))
+        else:
+            dist = (startNode,i+1,distEuc(tspData[startNode],tspData[i+1]))
+        distances.append(dist)
+
+
+
+    return distances
+
+
+#
+def sort(tupellist):
+    less = []
+    equal = []
+    greater = []
+
+    if len(tupellist) > 1:
+        pivot = tupellist[0][2]
+        for x in tupellist:
+            if x[2] < pivot:
+                less.append(x)
+            if x[2] == pivot:
+                equal.append(x)
+            if x[2] > pivot:
+                greater.append(x)
+        # Don't forget to return something!
+        return sort(less)+equal+sort(greater)  # Just use the + operator to join lists
+    # Note that you want equal ^^^^^ not pivot
+    else:  # You need to hande the part at the end of the recursion - when you only have one element in your array, just return the array.
+        return tupellist
+
 
 ## Main Block / example for distEucl
 
 import sys
 
-if (len(sys.argv) >= 2 and sys.argv[1].startswith("data")):
-    tspDict = readTspData(sys.argv[1])
-    if len(sys.argv) == 4:
-        print("Distance({}<->{}): {}".format(sys.argv[2],sys.argv[3],distEuc(tspDict[int(sys.argv[2])],tspDict[int(sys.argv[3])])))
-else:
-    print("you gave me something else than a tsplib formatted file, pls retry :|")
+# if (len(sys.argv) >= 2 and sys.argv[1].startswith("data")):
+#     tspDict = readTspData(sys.argv[1])
+#     if len(sys.argv) == 4:
+#         print("Distance({}<->{}): {}".format(sys.argv[2],sys.argv[3],distEuc(tspDict[int(sys.argv[2])],tspDict[int(sys.argv[3])])))
+# else:
+#     print("you gave me something else than a tsplib formatted file, pls retry :|")
+
+tspData = readTspData("data/berlin52.tsp")
+neighborList = nearestNeighborSort(tspData,10)
+print(neighborList[2][2])
+sortedneighborlist = sort(neighborList)
+print(sortedneighborlist)
