@@ -5,7 +5,6 @@ def magicSquare(n):
     x = int(n/2)
     y = 0
     square = np.zeros((n,n))
-
     for i in range(steps):
         square[y][x] = i + 1
         if (i+1) % n != 0 :
