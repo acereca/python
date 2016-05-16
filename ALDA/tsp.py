@@ -18,7 +18,7 @@ def readTspData(filename):
                                     'x':float(b1.strip()),
                                     'y':float(b2.strip())}})
             elif len(item.split(':')) == 2:
-                decl.update({item.split((':'))[0]:item.split(':')[1][1:]})
+                decl.update({item.split((':'))[0][:-1]:item.split(':')[1][1:]})
 
     tupel['PROPERTIES'] = decl
     return tupel
@@ -54,8 +54,6 @@ def distGeo(n1,n2):
     return d
 
 def neighborDist(tspData,startNode):
-    # sx = tspData[startNode]['x']
-    # sy = tspData[startNode]['y']
 
     distances = {}
     distances['TO'] = []
@@ -68,7 +66,7 @@ def neighborDist(tspData,startNode):
     for k,v in copyTspData.items():
         if tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'GEO':
             dist = distGeo(tspData[startNode],tspData[k])
-        elif tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'EUCL_2D':
+        elif tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'EUC_2D':
             dist = distEuc(tspData[startNode],tspData[k])
 
         distances['TO'].append((k,dist))
@@ -102,16 +100,9 @@ def sort(tupellist):
 ## Main Block / example for distEucl
 
 import sys
-
-# if (len(sys.argv) >= 2 and sys.argv[1].startswith('data')):
-#     tspDict = readTspData(sys.argv[1])
-#     if len(sys.argv) == 4:
-#         print('Distance({}<->{}): {}'.format(sys.argv[2],sys.argv[3],distEuc(tspDict[int(sys.argv[2])],tspDict[int(sys.argv[3])])))
-# else:
-#     print('you gave me something else than a tsplib formatted file, pls retry :|')
-
 ## example for eucl_2d data
 tspData = readTspData(sys.argv[1])
+#print(tspData)
 manipulationData = tspData.copy()
 startNode = int(sys.argv[2])
 node = startNode
