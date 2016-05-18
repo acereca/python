@@ -17,16 +17,6 @@ import matplotlib.mlab as _mlab
 
 # definitions
 
-# load complete data from file, skip defines the number of skipped rows
-def load_data(filename,skip=0):
-
-    # import pylab inside the function so that it doesn't appear as a function for the module
-    import pylab as py
-
-    filename = str(filename)
-    # returns every items in the data array as a list of items
-    return [i for i in _np.genfromtxt(filename, skip_=skip)]
-
 
 # fitting curves to a linear function
 def fit_lin(x,y,sigma=None,zero=False):
@@ -64,7 +54,7 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 # return formatted string for presenting results
 def printResult(name,value,error,unit=None):
     from IPython.display import display, Math, Latex
-    
+
     if error != 0:
         out = "%s\pm %s"%(value,error)
         if unit:
@@ -73,7 +63,7 @@ def printResult(name,value,error,unit=None):
         out = str(value)
         if unit:
             out = out + unit
-        
+
     display(Math(name + "=" + out))
 
 def relErr(dlist,alist):
