@@ -25,8 +25,8 @@ def readTspData(filename):
             # if line consists of "string:string"
             # write into "PRPERTIES" entry
             elif len(item.split(':')) == 2:
-                key = item.split((':'))[0].split((' '))[0]
-                val = item.split((':'))[0]
+                key = item.split((':'))[0].strip()
+                val = item.split((':'))[1].strip()
                 decl.update({key : val})
 
     tupel['PROPERTIES'] = decl
@@ -77,6 +77,7 @@ def neighborDist(tspData,startNode):
     copyTspData.pop('PROPERTIES')
     copyTspData.pop(startNode)
 
+
     # decide if distGeo or distEuc is needed
     if tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'GEO':
         for k,v in copyTspData.items():
@@ -115,29 +116,41 @@ def sort(tupellist):
         return tupellist['TO']
 
 # nearestNeighbor
-def nearestNeighborHeuristic():
-    pass
+def nearestNeighborHeuristic(dataDict,startNode):
+    manipulationData = dataDict.copy()
+    startNode = int(startNode)
+    node = startNode
+    length = 0
+
+    for item in range(len(dataDict)-2):
+        neighborDict = neighborDist(manipulationData,node)
+        sortedNeighborList = sort(neighborDict)
+
+        manipulationData.pop(node)
+        length += sortedNeighborList[0][1]
+        node = sortedNeighborList[0][0]
+
+    return length
 
 
-## Main Block
+## Main Block /nearestNeighbor for given node
+
+# nearestNeighborHeuristic(sys.argv[1],sys.argv[2])
 
 import sys
 tspData = readTspData(sys.argv[1])
-print(tspData)
-manipulationData = tspData.copy()
-startNode = int(sys.argv[2])
-node = startNode
-length = 1
+startNode = sys.argv[2]
 
-print(len(tspData),tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'])
+fl=0
 
-for item in range(len(tspData)-2):
-    neighborDict = neighborDist(manipulationData,node)
-    sortedNeighborList = sort(neighborDict)
+for i in range(len(tspData)-1):
+    length = nearestNeighborHeuristic(tspData,i+1)
+    if -length > fl or fl == 0:
+        fl = length
+    print(i)
+    sys.stdout.write("\033[F")
 
-    manipulationData.pop(node)
-    print(neighborDict)
-    length += sortedNeighborList[0][1]
-    node = sortedNeighborList[0][0]
 
-print(startNode,length)
+print('Nodes:',len(tspData)-1)
+print('Type: ',tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'])
+print('NNRT: ',length)
