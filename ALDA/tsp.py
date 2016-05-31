@@ -4,37 +4,49 @@
 ###     Python ver.: 3.3+
 
 def readTspData(filename):
+    # read file and clean of empty lines
     with open(filename) as f:
         content = f.read().splitlines()
         clean = [x.lstrip() for x in content if x != ' ']
         tupel = {}
         decl = {}
 
+        # process every line in cleaned file
         for item in clean:
+
+            # if line is node (begins with digit)
+            # write as key:value pair into dictionary
             if item[:1].isdigit():
                 c1,space,c2 = item.partition(' ')
                 b1,space,b2 = c2.partition(' ')
                 tupel.update({int(c1.strip()):{
                                     'x':float(b1.strip()),
                                     'y':float(b2.strip())}})
+            # if line consists of "string:string"
+            # write into "PRPERTIES" entry
             elif len(item.split(':')) == 2:
-                decl.update({item.split((':'))[0][:-1]:item.split(':')[1][1:]})
+                key = item.split((':'))[0].split((' '))[0]
+                val = item.split((':'))[0]
+                decl.update({key : val})
 
     tupel['PROPERTIES'] = decl
     return tupel
 
+# calculate euclidian distance between given nodes
 def distEuc(n1,n2):
     import math as m
     dx = n1['x']-n2['x']
     dy = n1['y']-n2['y']
     return int(m.sqrt(dx**2+dy**2)+.5)
 
+# calculate geometric distance in km of given nodes
 def distGeo(n1,n2):
     import math as m
 
     latitude = []
     longitude = []
 
+    # calculate longitude and latidude
     for node in (n1,n2):
         global m
         deg = int(node['x'])
@@ -45,6 +57,7 @@ def distGeo(n1,n2):
         minu = node['y'] - deg
         longitude.append(m.pi * (deg + 5.0 * minu / 3.0) / 180)
 
+    # calculate distance on sphere surface
     rad = 6378.388
     q1 = m.cos(longitude[0] - longitude[1])
     q2 = m.cos(latitude[0] - latitude[1])
@@ -53,28 +66,33 @@ def distGeo(n1,n2):
 
     return d
 
+# gives list of distance to each neighbor
 def neighborDist(tspData,startNode):
 
     distances = {}
     distances['TO'] = []
-    #calc distances between startNode and rest
 
+    # we dont need the "PROPERTIES" entry in tspData
     copyTspData = tspData.copy()
     copyTspData.pop('PROPERTIES')
     copyTspData.pop(startNode)
 
-    for k,v in copyTspData.items():
-        if tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'GEO':
+    # decide if distGeo or distEuc is needed
+    if tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'GEO':
+        for k,v in copyTspData.items():
             dist = distGeo(tspData[startNode],tspData[k])
-        elif tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'EUC_2D':
-            dist = distEuc(tspData[startNode],tspData[k])
+            distances['TO'].append((k,dist))
 
-        distances['TO'].append((k,dist))
+    elif tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'] == 'EUC_2D':
+        for k,v in copyTspData.items():
+            dist = distEuc(tspData[startNode],tspData[k])
+            distances['TO'].append((k,dist))
+
     distances['FROM'] = startNode
 
     return distances
 
-#
+# quicksort the given list of nodes via quicksort
 def sort(tupellist):
     less = []
     equal = []
@@ -96,26 +114,30 @@ def sort(tupellist):
     else:
         return tupellist['TO']
 
+# nearestNeighbor
+def nearestNeighborHeuristic():
+    pass
 
-## Main Block / example for distEucl
+
+## Main Block
 
 import sys
-## example for eucl_2d data
 tspData = readTspData(sys.argv[1])
-#print(tspData)
+print(tspData)
 manipulationData = tspData.copy()
 startNode = int(sys.argv[2])
 node = startNode
 length = 1
+
 print(len(tspData),tspData['PROPERTIES']['EDGE_WEIGHT_TYPE'])
+
 for item in range(len(tspData)-2):
     neighborDict = neighborDist(manipulationData,node)
     sortedNeighborList = sort(neighborDict)
-    #print(node,sortedNeighborList[0],item+1)
+
     manipulationData.pop(node)
+    print(neighborDict)
     length += sortedNeighborList[0][1]
     node = sortedNeighborList[0][0]
 
-#print(node,(startNode,distEuc(tspData[startNode],tspData[node])))
-
-print(length)
+print(startNode,length)
