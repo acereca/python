@@ -8,9 +8,9 @@ class Vertex:
         self.id = node
         self.adjacent = {}
         # Set distance to infinity for all nodes
-        self.distance = numpy.inf
-        # Mark all nodes unvisited        
-        self.visited = False  
+        self.distance = 99999999
+        # Mark all nodes unvisited
+        self.visited = False
         # Predecessor
         self.previous = None
 
@@ -18,7 +18,7 @@ class Vertex:
         self.adjacent[neighbor] = weight
 
     def get_connections(self):
-        return self.adjacent.keys()  
+        return self.adjacent.keys()
 
     def get_id(self):
         return self.id
@@ -40,6 +40,9 @@ class Vertex:
 
     def __str__(self):
         return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
+
+    def __lt__(self,other):
+        return (self.id < other.id)
 
 class Graph:
     def __init__(self):
@@ -78,4 +81,3 @@ class Graph:
 
     def get_previous(self, current):
         return self.previous
-
