@@ -1,6 +1,8 @@
 import numpy as np
 import sys
 
+from classes import *
+
 def readTspData(filename):
     with open(filename) as f:
         content = f.read().splitlines()
@@ -23,8 +25,26 @@ i = np.arange(nodes.shape[0])
 D[i,i] = np.inf
 i = np.argmin(D,1)
 # output nearest neighbor by node nr
-print(i+1)
-import matplotlib
-import matplotlib.pyplot as plt
+
+#import matplotlib
+#import matplotlib.pyplot as plt
 #plt.plot(nodes[:,0],nodes[:,1],linestyle='none',marker=".")
 #plt.show()
+
+g = Graph()
+
+for elem in tspData:
+    #print(elem)
+    g.add_vertex(elem[0])
+    
+for elem in range(len(diff)):
+    for inner in range(len(diff[elem])):
+        dist = numpy.sqrt(diff[elem,inner,0]**2+diff[elem,inner,1]**2)
+        g.add_edge(elem,inner,dist)
+        print(elem,inner,dist)
+        
+for v in g:
+    for w in v.get_connections():
+        vid = v.get_id()
+        wid = w.get_id()
+        print('( %s , %s, %d)'  % ( vid, wid, v.get_weight(w)))
