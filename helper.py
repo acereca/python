@@ -52,15 +52,15 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
     return fitted_curve(x), p
 
 # return formatted string for presenting results
-def printResult(name,value,error,unit=None):
+def printResult(name, value, error=0, unit=None, decimal = 5):
     from IPython.display import display, Math, Latex
 
     if error != 0:
-        out = "%s\pm %s"%(value,error)
+        out = "%s \pm %s"%(round(value,decimal),round(error,decimal))
         if unit:
             out = '(' + out + ')' + unit
     else:
-        out = str(value)
+        out = str(round(value,decimal))
         if unit:
             out = out + unit
 
