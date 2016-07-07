@@ -14,6 +14,8 @@
 import numpy as _np
 import matplotlib.pyplot as _plt
 import matplotlib.mlab as _mlab
+import uncertainties as unc
+import uncertainties.unumpy as unp
 
 # definitions
 
@@ -54,6 +56,10 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 # return formatted string for presenting results
 def printResult(name, value, error=0, unit=None, decimal = 5):
     from IPython.display import display, Math, Latex
+
+    if isinstance(value, unc.UFloat):
+        error = value.s
+        value = value.n
 
     if error != 0:
         out = "%s \pm %s"%(round(value,decimal),round(error,decimal))
