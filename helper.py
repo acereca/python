@@ -6,6 +6,7 @@
 ###     By:     Patrick Nisble                                      ###
 ###     Ver:    5                                                   ###
 ###     PyVer:  2.3+ / 3.3+                                         ###
+###     prereqs:numpy, matplotlib, uncertainties, scipy             ###
 #######################################################################
 
 # todos
@@ -15,10 +16,6 @@ import numpy as _np
 import matplotlib.pyplot as _plt
 import matplotlib.mlab as _mlab
 import uncertainties as unc
-import uncertainties.unumpy as unp
-
-# definitions
-
 
 # fitting curves to a linear function
 def fit_lin(x,y,sigma=None,zero=False):
@@ -55,12 +52,17 @@ def fit_poly(x, y, deg=1, extrapolate=[]):
 
 # return formatted string for presenting results
 def printResult(name, value, error=0, unit=None, decimal = 5):
+    '''return mathjax-html for jupyter notebook of formatted value, error and unit'''
+    
+    # import necessary libs for mathjax-html output
     from IPython.display import display, Math, Latex
 
+    # test for use of uncertainties lib
     if isinstance(value, unc.UFloat):
         error = value.s
         value = value.n
 
+    # print \pm err or not
     if error != 0:
         out = "%s \pm %s"%(round(value,decimal),round(error,decimal))
         if unit:
@@ -70,7 +72,5 @@ def printResult(name, value, error=0, unit=None, decimal = 5):
         if unit:
             out = out + unit
 
+    # display call to print in jupyter notebook
     display(Math(name + "=" + out))
-
-def relErr(dlist,alist):
-    return _np.sqrt(_np.sum((_np.array(dlist)/_np.array(alist))**2))
