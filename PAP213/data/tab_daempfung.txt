@@ -1,8 +1,0 @@
-#zeit[min] pm 1s 	Drehfrequenz[min^-1] pm 10min^-1
-0			650
-2			610
-4			565
-6			520
-8			480
-10			450
-12			415
