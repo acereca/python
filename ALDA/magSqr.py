@@ -13,9 +13,9 @@ def magicSquare(n):
         else:
             y = y + 1
         if x < 0:
-            x= x + n
+            x = x + n
         if y < 0:
-            y= y + n
+            y = y + n
         if y >= n:
             y = y - n
     return square
